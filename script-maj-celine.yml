@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: script-maj-celine
+spec:
+  template:
+    spec:
+      containers:
+      - name: script-maj
+        image: celine059/customweb  # Nouvelle version du site web dans Docker Hub
+        command: ["sh", "-c", "echo Mise à jour du site web en cours..."]  # Commande de mise à jour du site web
+      restartPolicy: Never
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: script-maj-celine
+spec:
+  replicas: 7
+  selector:
+    matchLabels:
+      application: maj
+  template:
+    metadata:
+      labels:
+        application: maj
+    spec:
+      containers:
+      - name: script-maj
+        image: celine059/customweb  # Nouvelle version du site web dans Docker Hub
+        ports:
+        - containerPort: 80
